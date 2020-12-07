@@ -5,8 +5,6 @@ export const search = (req, res) => {
   } = req;
   res.render("search", { pageName: "Search", searchingBy });
 };
-export const videos = (req, res) =>
-  res.render("videos", { pageName: "Videos" });
 export const upload = (req, res) =>
   res.render("upload", { pageName: "Upload" });
 export const videoDetail = (req, res) =>
