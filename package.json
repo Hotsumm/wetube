@@ -20,5 +20,14 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hotsumm/wetube.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hotsumm/wetube/issues"
+  },
+  "homepage": "https://github.com/Hotsumm/wetube#readme"
 }
