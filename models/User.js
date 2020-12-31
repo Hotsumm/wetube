@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
   avatarUrl: String,
   githubId: Number,
   googleId: Number,
+  naverId: Number,
 });
 
 UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });
