@@ -43,7 +43,6 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
   const {
     _json: { id, email, avatar_url: avatarUrl, name },
   } = profile;
-  console.log(profile);
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -77,11 +76,9 @@ export const googleLoginCallback = async (_, __, profile, cb) => {
   const {
     _json: { sub: id, name, email, picture: avatarUrl },
   } = profile;
-  console.log(profile);
   try {
     const user = await User.findOne({ email });
     if (user) {
-      console.log("Google user");
       user.googleId = id;
       user.avatarUrl = avatarUrl;
       user.name = name;
@@ -94,7 +91,6 @@ export const googleLoginCallback = async (_, __, profile, cb) => {
       email,
       avatarUrl,
     });
-    console.log("Google New user");
     return cb(null, newUser);
   } catch (error) {
     return cb(error);
@@ -148,15 +144,52 @@ export const userDetail = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("videos");
+    console.log(user);
     res.render("userDetail", { pageTitle: "User Detail", user });
   } catch (error) {
     res.redirect(routes.home);
   }
 };
 
-export const editProfile = (req, res) =>
+export const getEditProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "Edit Profile" });
 
-export const changePassword = (req, res) =>
+export const postEditProfile = async (req, res) => {
+  const {
+    user: { _id: id },
+    body: { name, email },
+    file,
+  } = req;
+  try {
+    await User.findByIdAndUpdate(id, {
+      name,
+      email,
+      avatarUrl: file ? file.path : req.user.avatarUrl,
+    });
+    res.redirect(routes.me);
+  } catch (error) {
+    res.redirect(routes.editProfile);
+  }
+};
+
+export const getChangePassword = (req, res) =>
   res.render("changePassword", { pageTitle: "Change Password" });
+
+export const postChangePassword = async (req, res) => {
+  const {
+    body: { oldPassword, newPassword, newPassword1 },
+  } = req;
+  try {
+    if (newPassword !== newPassword1) {
+      res.status(400);
+      res.redirect(`users/${routes.changePassword}`);
+      return;
+    }
+    req.user.changePassword(oldPassword, newPassword);
+    res.redirect(routes.me);
+  } catch (error) {
+    res.status(400);
+    res.redirect(`users/${routes.changePassword}`);
+  }
+};

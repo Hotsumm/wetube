@@ -2,6 +2,7 @@
 @import "config/_variables.scss";
 @import "config/reset.scss";
 @import "main.scss";
+@import "config/utils.scss";
 
 // Partials
 @import "partials/header.scss";
@@ -13,4 +14,4 @@
 // Pages
 @import "pages/home.scss";
 @import "pages/videoDetail.scss";
-@import "pages/userDetail.scss";
+@import "pages/userProfile.scss";
